@@ -2,7 +2,7 @@ package com.anubhavshukla.converter;
 
 /**
  * Identifies if the given properties line is a comment or not. Currently supports only simple Java
- * Properties file comments. i.e. lines beginning with character '#'
+ * properties file comments. i.e. lines beginning with character '#'
  */
 public class CommentIdentifier {
 

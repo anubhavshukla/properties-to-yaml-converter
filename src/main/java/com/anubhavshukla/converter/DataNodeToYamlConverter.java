@@ -15,7 +15,11 @@ public class DataNodeToYamlConverter {
   private static final String SINGLE_SPACE = " ";
   private static final String COLON = ":";
 
-  public StringBuilder parseDataNode(DataNode startNode) {
+  public String toYamlString(DataNode startNode) {
+    return parseDataNode(startNode).toString();
+  }
+
+  private StringBuilder parseDataNode(DataNode startNode) {
     LOGGER.log(Level.FINE, "Received DataNode for conversion to YAML: " + startNode);
 
     StringBuilder stringBuffer = new StringBuilder();

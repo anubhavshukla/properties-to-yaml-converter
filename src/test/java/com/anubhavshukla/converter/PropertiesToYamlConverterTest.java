@@ -1,171 +1,118 @@
 package com.anubhavshukla.converter;
 
-import static java.lang.System.lineSeparator;
 import static org.junit.Assert.assertEquals;
 
 import com.anubhavshukla.PropertiesToYamlConverter;
-import com.anubhavshukla.dataobject.DataNode;
 import com.anubhavshukla.exception.FileNotFoundException;
+import com.anubhavshukla.exception.InvalidRequestException;
 import java.io.File;
-import java.net.URISyntaxException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Scanner;
 import org.junit.Before;
 import org.junit.Test;
 
 public class PropertiesToYamlConverterTest {
-  
+
   private PropertiesToYamlConverter propertiesToYamlConverter;
 
   @Before
   public void setup() {
-    this.propertiesToYamlConverter = new PropertiesToYamlConverter(new CommentIdentifier());
+    this.propertiesToYamlConverter = new PropertiesToYamlConverter();
   }
 
   @Test
-  public void singlePropertySingleNode() throws URISyntaxException {
-    File file = new File(
-        this.getClass().getResource("/single-property-single-node.properties").toURI());
-    DataNode dataNode = propertiesToYamlConverter.fileToDataNode(file);
-    assertEquals("thisIsValue", dataNode.getNode("thisIsKey").getValue());
-  }
+  public void toYamlStringWithValidPath() {
+    //Given
+    String filePath = this.getClass()
+        .getResource("/multi-property-multilevel-with-invalidproperty.properties").getFile();
 
-  @Test
-  public void singlePropertySingleNodeToYaml() throws URISyntaxException {
-    File file = new File(
-        this.getClass().getResource("/single-property-single-node.properties").toURI());
-    String yamlStr = propertiesToYamlConverter.propertiesFileToYaml(file);
-    assertEquals("thisIsKey: thisIsValue" + lineSeparator(), yamlStr);
-  }
+    //When
+    String result = propertiesToYamlConverter.toYamlString(filePath);
 
-  @Test
-  public void singlePropertyTwoNode() throws URISyntaxException {
-    File file = new File(
-        this.getClass().getResource("/single-property-two-node.properties").toURI());
-    DataNode dataNode = propertiesToYamlConverter.fileToDataNode(file);
-    assertEquals("thisIsValue", dataNode.getNode("keyPart1").getNode("keyPart2").getValue());
-  }
-
-  @Test
-  public void singlePropertyTwoNodeToYaml() throws URISyntaxException {
-    File file = new File(
-        this.getClass().getResource("/single-property-two-node.properties").toURI());
-    String yamlStr = propertiesToYamlConverter.propertiesFileToYaml(file);
-    assertEquals("keyPart1:" + lineSeparator() + "  keyPart2: thisIsValue" + lineSeparator(),
-        yamlStr);
-  }
-
-  @Test
-  public void singlePropertyMultilevel() throws URISyntaxException {
-    File file = new File(
-        PropertiesToYamlConverterTest.class.getResource("/single-property-multilevel.properties")
-            .toURI());
-    DataNode dataNode = propertiesToYamlConverter.fileToDataNode(file);
-    assertEquals("value1", dataNode.getNode("keyPart1").getValue());
-    assertEquals("value2", dataNode.getNode("keyPart1").getNode("keyPart2").getValue());
-  }
-
-  @Test
-  public void singlePropertyMultilevelToYaml() throws URISyntaxException {
-    File file = new File(
-        this.getClass().getResource("/single-property-multilevel.properties").toURI());
-    String yamlStr = propertiesToYamlConverter.propertiesFileToYaml(file);
-    assertEquals("keyPart1: value1" + lineSeparator() + "  keyPart2: value2" + lineSeparator(),
-        yamlStr);
-  }
-
-  @Test
-  public void multiPropertyMultilevel() throws URISyntaxException {
-    File file = new File(
-        this.getClass().getResource("/multi-property-multilevel.properties").toURI());
-    DataNode dataNode = propertiesToYamlConverter.fileToDataNode(file);
-    assertEquals("value11", dataNode.getNode("keyPart11").getValue());
-    assertEquals("value12", dataNode.getNode("keyPart11").getNode("keyPart12").getValue());
-    assertEquals("value21", dataNode.getNode("keyPart21").getValue());
-    assertEquals("value22", dataNode.getNode("keyPart21").getNode("keyPart22").getValue());
-    assertEquals("value23",
-        dataNode.getNode("keyPart21").getNode("keyPart22").getNode("keyPart23").getValue());
-  }
-
-  @Test
-  public void multiPropertyMultilevelWithComments() throws URISyntaxException {
-    File file = new File(
-        this.getClass().getResource("/multi-property-multilevel-with-comments.properties").toURI());
-    DataNode dataNode = propertiesToYamlConverter.fileToDataNode(file);
-    assertEquals("value11", dataNode.getNode("keyPart11").getValue());
-    assertEquals("value12", dataNode.getNode("keyPart11").getNode("keyPart12").getValue());
-    assertEquals("value21", dataNode.getNode("keyPart21").getValue());
-    assertEquals("value22", dataNode.getNode("keyPart21").getNode("keyPart22").getValue());
-    assertEquals("value23",
-        dataNode.getNode("keyPart21").getNode("keyPart22").getNode("keyPart23").getValue());
-  }
-
-  @Test
-  public void multiPropertyMultilevelWithInvalidProperty() throws URISyntaxException {
-    File file = new File(
-        this.getClass().getResource("/multi-property-multilevel-with-invalidproperty.properties")
-            .toURI());
-    DataNode dataNode = propertiesToYamlConverter.fileToDataNode(file);
-    assertEquals("value11", dataNode.getNode("keyPart11").getValue());
-    assertEquals("value12", dataNode.getNode("keyPart11").getNode("keyPart12").getValue());
-    assertEquals("value21", dataNode.getNode("keyPart21").getValue());
-    assertEquals("value22", dataNode.getNode("keyPart21").getNode("keyPart22").getValue());
-    assertEquals("value23",
-        dataNode.getNode("keyPart21").getNode("keyPart22").getNode("keyPart23").getValue());
-  }
-
-  @Test
-  public void directoryOneParser() throws URISyntaxException {
-    File file = new File(this.getClass().getResource("/directoryOne").toURI());
-    DataNode dataNode = propertiesToYamlConverter.directoryToDataNode(file);
-    assertEquals("value11", dataNode.getNode("keyPart11").getValue());
-    assertEquals("value12", dataNode.getNode("keyPart11").getNode("keyPart12").getValue());
-    assertEquals("value21", dataNode.getNode("keyPart21").getValue());
-    assertEquals("value22", dataNode.getNode("keyPart21").getNode("keyPart22").getValue());
-    assertEquals("value23",
-        dataNode.getNode("keyPart21").getNode("keyPart22").getNode("keyPart23").getValue());
-    assertEquals("thisIsValue", dataNode.getNode("thisIsKey").getValue());
+    //Then
+    assertEquals(expectedResult("/multi-property-multilevel-with-invalidproperty.yml"), result);
   }
 
   @Test(expected = FileNotFoundException.class)
-  public void testFileInvalidPath() throws URISyntaxException {
-    File file = new File("/file_path");
-    propertiesToYamlConverter.fileToDataNode(file);
-  }
+  public void toYamlStringWithInvalidPath() {
+    //Given
+    String filePath = "/invalid-file-path.properties";
 
-  @Test(expected = FileNotFoundException.class)
-  public void testDirectoryInvalidPath() throws URISyntaxException {
-    File file = new File("/file_path");
-    propertiesToYamlConverter.directoryToDataNode(file);
+    //When
+    propertiesToYamlConverter.toYamlString(filePath);
   }
 
   @Test
-  public void testFileString() throws URISyntaxException {
+  public void fileToYamlStringWithValidPath() {
+    //Given
+    File file = new File(this.getClass()
+        .getResource("/multi-property-multilevel-with-invalidproperty.properties").getFile());
+
+    //When
+    String result = propertiesToYamlConverter.fileToYamlString(file);
+
+    //Then
+    assertEquals(expectedResult("/multi-property-multilevel-with-invalidproperty.yml"), result);
+  }
+
+  @Test(expected = FileNotFoundException.class)
+  public void fileToYamlStringWithFileNotFound() {
+    //Given
+    File file = new File("/invalid-file-path.properties");
+
+    //When
+    propertiesToYamlConverter.fileToYamlString(file);
+  }
+
+  @Test(expected = InvalidRequestException.class)
+  public void fileToYamlStringWithInvalidDirectoryFile() {
+    //Given
+    File file = new File(this.getClass().getResource("/directoryOne").getFile());
+
+    //When
+    propertiesToYamlConverter.fileToYamlString(file);
+  }
+
+  @Test
+  public void directoryToYamlStringWithValidPath() {
+    //Given
+    File file = new File(this.getClass()
+        .getResource("/directoryOne").getFile());
+
+    //When
+    String result = propertiesToYamlConverter.directoryToYamlString(file);
+
+    //Then
+    assertEquals(expectedResult("/directoryOne/combined.yml"), result);
+  }
+
+  @Test(expected = FileNotFoundException.class)
+  public void directoryToYamlStringWithFileNotFound() {
+    //Given
+    File file = new File("/invalid-file-path.properties");
+
+    //When
+    propertiesToYamlConverter.directoryToYamlString(file);
+  }
+
+  @Test(expected = InvalidRequestException.class)
+  public void directoryToYamlStringWithInvalidDirectoryFile() {
+    //Given
     File file = new File(
-        this.getClass().getResource("/multi-property-multilevel-with-invalidproperty.properties")
-            .toURI());
-    DataNode dataNode = propertiesToYamlConverter.toDataNode(file.getAbsolutePath());
-    assertEquals("value11", dataNode.getNode("keyPart11").getValue());
-    assertEquals("value12", dataNode.getNode("keyPart11").getNode("keyPart12").getValue());
-    assertEquals("value21", dataNode.getNode("keyPart21").getValue());
-    assertEquals("value22", dataNode.getNode("keyPart21").getNode("keyPart22").getValue());
-    assertEquals("value23",
-        dataNode.getNode("keyPart21").getNode("keyPart22").getNode("keyPart23").getValue());
+        this.getClass().getResource("/multi-property-multilevel.properties").getFile());
+
+    //When
+    propertiesToYamlConverter.directoryToYamlString(file);
   }
 
-  @Test
-  public void testDirectoryFileString() throws URISyntaxException {
-    File file = new File(this.getClass().getResource("/directoryOne").toURI());
-    DataNode dataNode = propertiesToYamlConverter.toDataNode(file.getAbsolutePath());
-    assertEquals("value11", dataNode.getNode("keyPart11").getValue());
-    assertEquals("value12", dataNode.getNode("keyPart11").getNode("keyPart12").getValue());
-    assertEquals("value21", dataNode.getNode("keyPart21").getValue());
-    assertEquals("value22", dataNode.getNode("keyPart21").getNode("keyPart22").getValue());
-    assertEquals("value23",
-        dataNode.getNode("keyPart21").getNode("keyPart22").getNode("keyPart23").getValue());
-    assertEquals("thisIsValue", dataNode.getNode("thisIsKey").getValue());
-  }
-
-  @Test(expected = FileNotFoundException.class)
-  public void testDirectoryInvalidFileString() {
-    propertiesToYamlConverter.toDataNode("/invalid/file/path");
+  private String expectedResult(String fileName) {
+    try (InputStream is = this.getClass().getResourceAsStream(fileName)) {
+      Scanner s = new Scanner(is).useDelimiter("\\A");
+      return s.hasNext() ? s.next() : "";
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 }

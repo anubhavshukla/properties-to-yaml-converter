@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 
 import com.anubhavshukla.dataobject.DataNode;
 import com.anubhavshukla.exception.FileNotFoundException;
+import com.anubhavshukla.exception.InvalidRequestException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -21,22 +22,23 @@ public class PropertiesToDataNodeConverter {
 
   private static final Logger LOGGER = Logger
       .getLogger(PropertiesToDataNodeConverter.class.getName());
-  public static final char PROPERTY_SEPARATOR = '=';
+
+  private static final char PROPERTY_SEPARATOR = '=';
 
   private final CommentIdentifier commentIdentifier;
 
-  public PropertiesToDataNodeConverter(CommentIdentifier commentIdentifier) {
-    this.commentIdentifier = commentIdentifier;
+  public PropertiesToDataNodeConverter() {
+    this.commentIdentifier = new CommentIdentifier();
   }
 
   /**
    * Accepts a file name and parses it to DataNode. Detection of file type i.e. file or folder is
    * done here.
    */
-  public DataNode toDataNode(String propertiesFilePath) {
-    File propertiesFile = new File(propertiesFilePath);
+  public DataNode toDataNode(String filePath) {
+    File propertiesFile = new File(filePath);
     if (!propertiesFile.exists()) {
-      LOGGER.log(Level.SEVERE, "File does not exist: " + propertiesFilePath);
+      LOGGER.log(Level.SEVERE, "File does not exist: " + filePath);
       throw new FileNotFoundException("File not found.");
     }
 
@@ -51,9 +53,14 @@ public class PropertiesToDataNodeConverter {
    * Parses all the Properties files in a directory and converts them to a single DataNode.
    */
   public DataNode directoryToDataNode(File propertiesFolder) {
-    if (!propertiesFolder.exists()) {
-      LOGGER.log(Level.SEVERE, "File does not exist: ");
+    if (propertiesFolder == null || !propertiesFolder.exists()) {
+      LOGGER.log(Level.SEVERE, "File does not exist.");
       throw new FileNotFoundException("File not found.");
+    }
+
+    if (propertiesFolder.isFile()) {
+      LOGGER.log(Level.SEVERE, "Given file path is not a directory: " + propertiesFolder.getName());
+      throw new InvalidRequestException("Not a directory.");
     }
 
     List<String> propertiesList = new LinkedList<>();
@@ -77,9 +84,14 @@ public class PropertiesToDataNodeConverter {
    * Converts a properties file into intermediate transient storage of DataNode.
    */
   public DataNode fileToDataNode(File propertiesFile) {
-    if (!propertiesFile.exists()) {
-      LOGGER.log(Level.SEVERE, "File does not exist");
+    if (propertiesFile == null || !propertiesFile.exists()) {
+      LOGGER.log(Level.SEVERE, "File does not exist.");
       throw new FileNotFoundException("File not found.");
+    }
+
+    if (propertiesFile.isDirectory()) {
+      LOGGER.log(Level.SEVERE, "Given file path is not a file.");
+      throw new InvalidRequestException("Not a directory.");
     }
 
     return propertiesListToDataNode(fileToPropertiesList(propertiesFile));
@@ -113,9 +125,18 @@ public class PropertiesToDataNodeConverter {
   private DataNode propertiesListToDataNode(List<String> propertiesList) {
     LOGGER.fine("Converting properties list to DataNode: " + propertiesList);
     DataNode rootNode = DataNode.getInstance();
-    propertiesList.forEach(s -> processProperty(s, rootNode));
+    propertiesList.stream()
+        .filter(line -> isValidPropertyLine(line))
+        .forEach(line -> processProperty(line, rootNode));
     LOGGER.fine("Generated DataNode: " + rootNode);
     return rootNode;
+  }
+
+  /**
+   * Filter all empty lines and lines not containing '=' character.
+   */
+  private boolean isValidPropertyLine(String line) {
+    return !line.trim().equals("") && line.contains("=");
   }
 
   /**
@@ -123,10 +144,6 @@ public class PropertiesToDataNodeConverter {
    */
   private DataNode processProperty(String propertyLine, DataNode rootNode) {
     LOGGER.fine("Processing property string: " + propertyLine);
-    if (!propertyLine.contains("=")) {
-      LOGGER.log(Level.FINE, "Invalid property line: " + propertyLine);
-      return rootNode;
-    }
     int indexOfPropertySeparator = propertyLine.indexOf(PROPERTY_SEPARATOR);
     String key = propertyLine.substring(0, indexOfPropertySeparator);
     String value = propertyLine.substring(indexOfPropertySeparator + 1);

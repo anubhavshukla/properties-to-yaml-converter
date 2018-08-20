@@ -1,6 +1,5 @@
 package com.anubhavshukla;
 
-import com.anubhavshukla.converter.CommentIdentifier;
 import com.anubhavshukla.exception.InvalidRequestException;
 import java.io.File;
 import java.util.logging.Level;
@@ -17,9 +16,8 @@ public class Main {
   public static void main(String[] args) {
     try {
       String filePath = getLocation(args);
-      PropertiesToYamlConverter propertiesToYamlConverter = new PropertiesToYamlConverter(
-          new CommentIdentifier());
-      System.out.println(propertiesToYamlConverter.propertiesFileToYaml(new File(filePath)));
+      PropertiesToYamlConverter propertiesToYamlConverter = new PropertiesToYamlConverter();
+      System.out.println(propertiesToYamlConverter.fileToYamlString(new File(filePath)));
     } catch (Exception e) {
       LOGGER.log(Level.FINE, e.getMessage(), e);
     }
