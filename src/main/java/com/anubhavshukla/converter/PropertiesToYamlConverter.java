@@ -1,7 +1,5 @@
-package com.anubhavshukla;
+package com.anubhavshukla.converter;
 
-import com.anubhavshukla.converter.DataNodeToYamlConverter;
-import com.anubhavshukla.converter.PropertiesToDataNodeConverter;
 import java.io.File;
 import java.util.logging.Logger;
 

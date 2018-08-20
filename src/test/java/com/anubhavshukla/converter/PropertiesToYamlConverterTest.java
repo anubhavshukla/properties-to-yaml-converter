@@ -2,7 +2,6 @@ package com.anubhavshukla.converter;
 
 import static org.junit.Assert.assertEquals;
 
-import com.anubhavshukla.PropertiesToYamlConverter;
 import com.anubhavshukla.exception.FileNotFoundException;
 import com.anubhavshukla.exception.InvalidRequestException;
 import java.io.File;

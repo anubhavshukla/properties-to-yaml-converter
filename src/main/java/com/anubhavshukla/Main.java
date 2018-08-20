@@ -1,6 +1,8 @@
 package com.anubhavshukla;
 
+import com.anubhavshukla.converter.PropertiesToYamlConverter;
 import com.anubhavshukla.exception.InvalidRequestException;
+import com.anubhavshukla.utils.FileUtil;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,7 +19,8 @@ public class Main {
     try {
       String filePath = getLocation(args);
       PropertiesToYamlConverter propertiesToYamlConverter = new PropertiesToYamlConverter();
-      System.out.println(propertiesToYamlConverter.fileToYamlString(new File(filePath)));
+      String yamlContent = propertiesToYamlConverter.fileToYamlString(new File(filePath));
+      FileUtil.writeToYamlFile(filePath, yamlContent);
     } catch (Exception e) {
       LOGGER.log(Level.FINE, e.getMessage(), e);
     }
