@@ -1,9 +1,9 @@
-package com.anubhavshukla.converter;
+package com.anubhavshukla.p2y.converter;
 
 import static org.junit.Assert.assertEquals;
 
-import com.anubhavshukla.exception.FileNotFoundException;
-import com.anubhavshukla.exception.InvalidRequestException;
+import com.anubhavshukla.p2y.exception.FileNotFoundException;
+import com.anubhavshukla.p2y.exception.InvalidRequestException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -83,7 +83,7 @@ public class PropertiesToYamlConverterTest {
     String result = propertiesToYamlConverter.directoryToYamlString(file);
 
     //Then
-    assertEquals(expectedResult("/directoryOne/combined.yml"), result);
+    assertEquals(expectedResult("/directoryOne/result.yml"), result);
   }
 
   @Test(expected = FileNotFoundException.class)

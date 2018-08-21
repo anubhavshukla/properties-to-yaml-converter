@@ -1,11 +1,11 @@
-package com.anubhavshukla.converter;
+package com.anubhavshukla.p2y.converter;
 
 import java.io.File;
-import java.util.logging.Logger;
 
+/**
+ * Convert properties file to YAML string.
+ */
 public class PropertiesToYamlConverter {
-
-  private static final Logger LOGGER = Logger.getLogger(PropertiesToYamlConverter.class.getName());
 
   private final PropertiesToDataNodeConverter propertiesToDataNodeConverter;
   private final DataNodeToYamlConverter dataNodeToYamlConverter;

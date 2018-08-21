@@ -1,8 +1,8 @@
-package com.anubhavshukla.converter;
+package com.anubhavshukla.p2y.converter;
 
 import static org.junit.Assert.assertEquals;
 
-import com.anubhavshukla.dataobject.DataNode;
+import com.anubhavshukla.p2y.dataobject.DataNode;
 import java.io.File;
 import java.net.URISyntaxException;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package com.anubhavshukla.converter;
+package com.anubhavshukla.p2y.converter;
 
 /**
  * Identifies if the given properties line is a comment or not. Currently supports only simple Java

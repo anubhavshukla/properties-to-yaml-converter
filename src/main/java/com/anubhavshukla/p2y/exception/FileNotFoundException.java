@@ -1,4 +1,4 @@
-package com.anubhavshukla.exception;
+package com.anubhavshukla.p2y.exception;
 
 /**
  * Thrown if provided properties file is not found.

@@ -1,4 +1,4 @@
-package com.anubhavshukla.exception;
+package com.anubhavshukla.p2y.exception;
 
 /**
  * Thrown in case of invalid invocation of tool from command line.

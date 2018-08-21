@@ -1,4 +1,4 @@
-package com.anubhavshukla.dataobject;
+package com.anubhavshukla.p2y.dataobject;
 
 import java.util.SortedMap;
 import java.util.TreeMap;
