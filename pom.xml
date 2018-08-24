@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.anubhavshukla</groupId>
   <artifactId>properties-to-yaml-converter</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.1</version>
   <packaging>jar</packaging>
 
   <name>Properties to Yaml converter</name>
@@ -43,7 +41,7 @@
       scm:git:git@github.com:anubhavshukla/properties-to-yaml-converter.git
     </developerConnection>
     <url>https://github.com/anubhavshukla/properties-to-yaml-converter</url>
-    <tag>HEAD</tag>
+    <tag>R-1.0.1</tag>
   </scm>
 
   <properties>
