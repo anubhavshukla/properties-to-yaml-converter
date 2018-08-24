@@ -1,4 +1,4 @@
-[Properties to YAML Converter](https://gitlab.com/anubhavshukla/properties-to-yaml-converter) 
+[Properties to YAML Converter](https://github.com/anubhavshukla/properties-to-yaml-converter) 
 ===
 
 This library allows you to convert Properties files into Yaml files. The library can be used through Java code or from command line.
