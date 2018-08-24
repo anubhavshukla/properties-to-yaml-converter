@@ -14,6 +14,20 @@
   <description>
     Java library to parse Properties file and generate corresponding Yaml file.
   </description>
+  <url>https://github.com/anubhavshukla/properties-to-yaml-converter</url>
+
+  <developers>
+    <developer>
+      <id>ashukla</id>
+      <name>Anubhav Shukla</name>
+      <email>shukla.anubhav@gmail.com</email>
+      <roles>
+        <role>Project-Administrator</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>+2</timezone>
+    </developer>
+  </developers>
 
   <licenses>
     <license>
