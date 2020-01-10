@@ -126,7 +126,7 @@ public class PropertiesToDataNodeConverter {
     LOGGER.fine("Converting properties list to DataNode: " + propertiesList);
     DataNode rootNode = DataNode.getInstance();
     propertiesList.stream()
-        .filter(line -> isValidPropertyLine(line))
+        .filter(this::isValidPropertyLine)
         .forEach(line -> processProperty(line, rootNode));
     LOGGER.fine("Generated DataNode: " + rootNode);
     return rootNode;

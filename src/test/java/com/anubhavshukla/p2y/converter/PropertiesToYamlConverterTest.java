@@ -55,6 +55,19 @@ public class PropertiesToYamlConverterTest {
     assertEquals(expectedResult("/multi-property-multilevel-with-invalidproperty.yml"), result);
   }
 
+  @Test
+  public void fileToYamlStringWithListProperties() {
+    //Given
+    File file = new File(this.getClass()
+        .getResource("/multi-property-list-value.properties").getFile());
+
+    //When
+    String result = propertiesToYamlConverter.fileToYamlString(file);
+
+    //Then
+    assertEquals(expectedResult("/multi-property-list-value.yml"), result);
+  }
+
   @Test(expected = FileNotFoundException.class)
   public void fileToYamlStringWithFileNotFound() {
     //Given
